@@ -73,13 +73,12 @@ int** roulette_wheel_selection(int** population, float* fitness, int populationS
         cumulation[i] = cumulation[i-1] + (float)fitness[i];
     }
 
-    for(int i = 0 ; i < populationSize ; ++i){
-        int selector = rand() % 100;
+    for (int i = 0; i < populationSize; ++i) {
         result[i] = new int[dimensionSize];
-
-        for(int j = 0 ; j < populationSize ; ++j){
-            if(cumulation[j] >= selector){
-                result[i] = population[j];
+        int selector = rand() % 100;
+        for (int j = 0; j < populationSize; ++j) {
+            if (cumulation[j] >= selector) {
+                memcpy(result[i], population[j], dimensionSize * sizeof(int));
                 break;
             }
         }
@@ -130,7 +129,7 @@ int** mutation(int** population, int populationSize, int dimensionSize, float mu
     int** newPopulation = new int*[populationSize];
     for(int i = 0 ; i < populationSize ; ++i){
         newPopulation[i] = new int[dimensionSize];
-        newPopulation[i] = population[i];
+        memcpy(newPopulation[i], population[i], dimensionSize * sizeof(int));
 
         float randomRatio = float(rand() % 1000) / 1000;
 

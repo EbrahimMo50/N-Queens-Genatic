@@ -29,6 +29,14 @@ float calculate_success(int** oldPopulation, int** newPopulation, int population
     return 1 - float(countAttacksOld) / float(countAttacksNew);
 }
 
+void free_2D_array(int** array, int size) {
+    if (array == nullptr) return;
+
+    for (int i = 0; i < size; ++i)
+        delete[] array[i];
+    delete[] array;
+}
+
 int run(){
     cout << "---------------------------------------\n";
     cout << "intializing dimensions with " << BOARD_DIMENSION 
@@ -41,6 +49,7 @@ int run(){
 
     while(n--){
         cout << "---------------------------------------\n";
+
         cout << "Current generation: " << MAX_GENERATION - n << "\n";
 
         float* fitness = calculate_fitness_for_population(population, POPULATION_SIZE, BOARD_DIMENSION);
@@ -51,11 +60,16 @@ int run(){
         float successRate = calculate_success(population, mutatedPopulation, POPULATION_SIZE, BOARD_DIMENSION);
         cout << "Success rate in new poopulation (" << successRate * 100 << "%)\n";
 
-        population = mutatedPopulation;
         cout << "---------------------------------------\n";
 
-        free(crossOver);
-        free(fitness);
+        // Free old memory (HAS GREAT IMPACT ON PERFORMACE TIME)
+
+        // free_2D_array(population, POPULATION_SIZE);
+        // free_2D_array(newPopulation, POPULATION_SIZE);
+        // free_2D_array(crossOver, POPULATION_SIZE);
+
+        population = mutatedPopulation;
+        delete[] fitness;
     }
 
     for(int i = 0 ; i < POPULATION_SIZE ; ++i){
