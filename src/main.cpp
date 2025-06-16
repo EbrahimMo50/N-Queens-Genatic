@@ -4,10 +4,11 @@
 
 using namespace std;
 
-const int BOARD_DIMENSION = 5;
-const int MAX_GENERATION = 1000;
-const int POPULATION_SIZE = 1000;
+const int BOARD_DIMENSION = 50;
+const int MAX_GENERATION = 2500;
+const int POPULATION_SIZE = 2500;
 const int NUMBER_QUEENS = 5;        //only effective when used in (queens < board dim) state
+const int MUTATION_RATE = 0.1;
 
 pair<int*,int> bestState = make_pair(new int[BOARD_DIMENSION], numeric_limits<int>::max());
 
@@ -55,7 +56,7 @@ int run(){
         float* fitness = calculate_fitness_for_population(population, POPULATION_SIZE, BOARD_DIMENSION);
         int** newPopulation = roulette_wheel_selection(population, fitness, POPULATION_SIZE, BOARD_DIMENSION);
         int** crossOver = random_cross_over(newPopulation, POPULATION_SIZE, BOARD_DIMENSION);
-        int** mutatedPopulation = mutation(crossOver, POPULATION_SIZE, BOARD_DIMENSION, 0.01);
+        int** mutatedPopulation = mutation(crossOver, POPULATION_SIZE, BOARD_DIMENSION, MUTATION_RATE);
 
         float successRate = calculate_success(population, mutatedPopulation, POPULATION_SIZE, BOARD_DIMENSION);
         cout << "Success rate in new poopulation (" << successRate * 100 << "%)\n";
